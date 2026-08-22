@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="30" fill="url(#logo-grad)"/>
+  <!-- Stylized Devil's Advocate symbol: stylized overlapping 'D' and 'A' -->
+  <path d="M30 30 H48 C60 30 68 38 68 50 C68 62 60 70 48 70 H30 V30 Z M40 38 V62 H47 C54 62 58 58 58 50 C58 42 54 38 47 38 H40 Z" fill="#FFFFFF"/>
+  <path d="M52 48 L64 70 H74 L60 45 L52 48 Z" fill="#93C5FD"/>
+</svg>

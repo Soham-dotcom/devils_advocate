@@ -1,0 +1,164 @@
+:root {
+  --folder-color: #E0A33C;
+  --folder-back-color: #8A6526;
+  --paper-1: #e6e6e6;
+  --paper-2: #f2f2f2;
+  --paper-3: #ffffff;
+}
+
+.folder {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.folder:not(.open):hover {
+  transform: translateY(-8px);
+}
+
+.folder:not(.open):hover .paper {
+  transform: translate(-50%, -10%);
+}
+
+.folder:not(.open):hover .folder__front {
+  transform: skew(15deg) scaleY(0.7);
+}
+
+.folder:not(.open):hover .right {
+  transform: skew(-15deg) scaleY(0.7);
+}
+
+.folder.open {
+  transform: translateY(-8px);
+}
+
+.folder.open .paper.completed:nth-child(1),
+.folder.open:not(.has-completed-tracking) .paper:nth-child(1) {
+  transform: translate(calc(-120% + var(--magnet-x, 0px)), calc(-70% + var(--magnet-y, 0px))) rotateZ(-15deg);
+}
+
+.folder.open .paper.completed:nth-child(1):hover,
+.folder.open:not(.has-completed-tracking) .paper:nth-child(1):hover {
+  transform: translate(calc(-120% + var(--magnet-x, 0px)), calc(-70% + var(--magnet-y, 0px))) rotateZ(-15deg) scale(1.08);
+}
+
+.folder.open .paper.completed:nth-child(2),
+.folder.open:not(.has-completed-tracking) .paper:nth-child(2) {
+  transform: translate(calc(10% + var(--magnet-x, 0px)), calc(-70% + var(--magnet-y, 0px))) rotateZ(15deg);
+  height: 80%;
+}
+
+.folder.open .paper.completed:nth-child(2):hover,
+.folder.open:not(.has-completed-tracking) .paper:nth-child(2):hover {
+  transform: translate(calc(10% + var(--magnet-x, 0px)), calc(-70% + var(--magnet-y, 0px))) rotateZ(15deg) scale(1.08);
+}
+
+.folder.open .paper.completed:nth-child(3),
+.folder.open:not(.has-completed-tracking) .paper:nth-child(3) {
+  transform: translate(calc(-50% + var(--magnet-x, 0px)), calc(-105% + var(--magnet-y, 0px))) rotateZ(5deg);
+  height: 80%;
+}
+
+.folder.open .paper.completed:nth-child(3):hover,
+.folder.open:not(.has-completed-tracking) .paper:nth-child(3):hover {
+  transform: translate(calc(-50% + var(--magnet-x, 0px)), calc(-105% + var(--magnet-y, 0px))) rotateZ(5deg) scale(1.08);
+}
+
+/* Completion styling: custom background and colored glows */
+.folder .paper.completed {
+  background: #ffffff !important;
+  color: #14110F;
+  font-weight: 800;
+}
+
+.folder .paper.completed.paper-1 {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.folder .paper.completed.paper-2 {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+}
+
+.folder .paper.completed.paper-3 {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+}
+
+.folder.open .folder__front {
+  transform: skew(15deg) scaleY(0.65);
+}
+
+.folder.open .right {
+  transform: skew(-15deg) scaleY(0.65);
+}
+
+.folder__back {
+  position: relative;
+  width: 110px;
+  height: 85px;
+  background: var(--folder-back-color);
+  border-radius: 0px 12px 12px 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.folder__back::after {
+  position: absolute;
+  z-index: 0;
+  bottom: 98%;
+  left: 0;
+  content: '';
+  width: 35px;
+  height: 12px;
+  background: var(--folder-back-color);
+  border-radius: 6px 6px 0 0;
+}
+
+.paper {
+  position: absolute;
+  z-index: 2;
+  bottom: 12%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  width: 75%;
+  height: 82%;
+  background: var(--paper-1);
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  color: #14110F;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.paper:nth-child(2) {
+  background: var(--paper-2);
+  width: 82%;
+  height: 74%;
+}
+
+.paper:nth-child(3) {
+  background: var(--paper-3);
+  width: 90%;
+  height: 64%;
+}
+
+.folder__front {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background: var(--folder-color);
+  border-radius: 5px 12px 12px 12px;
+  transform-origin: bottom;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.15), 0 5px 15px rgba(0, 0, 0, 0.2);
+}

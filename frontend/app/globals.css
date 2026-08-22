@@ -1,0 +1,345 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* shadcn's components rely on these variants. Its init writes them, but the
+   install aborted at the dependency step before reaching the CSS, so they were
+   missing — which left the Tabs root as flex-row and collapsed the panel to 0px
+   wide with its content still in the DOM. Also restores the active-tab
+   highlight and the accordion open/close animations. */
+@custom-variant data-active (&[data-state="active"]);
+@custom-variant data-open (&[data-state="open"]);
+@custom-variant data-closed (&[data-state="closed"]);
+@custom-variant data-horizontal (&[data-orientation="horizontal"]);
+@custom-variant data-vertical (&[data-orientation="vertical"]);
+
+/* ---------------------------------------------------------------------------
+   Palette drawn from the subject: Indian court files, not dark-SaaS defaults.
+   A warm ink ground rather than slate-blue; parchment rather than pure white;
+   saffron as the mark of authority. The two parties are separated by
+   temperature (cool ink vs warm clay) rather than by a red/blue team coding,
+   because the law does not colour-code its parties and neither should we.
+--------------------------------------------------------------------------- */
+:root {
+  --ink: #14110F;
+  --file: #1E1A17;
+  --file-raised: #262019;
+  --rule: #37302A;
+  --rule-bright: #4A413A;
+
+  --parchment: #EDE6DA;
+  --parchment-dim: #A29889;
+  --parchment-faint: #6E655B;
+
+  /* Three chromatic families, and only three. Previously there were six with
+     no relationship between them — and 'respondent' sat 9 degrees from
+     'unsupported', so a party colour read as an error state.
+
+       saffron  42deg  brand and authority; the only gold
+       teal    188deg  the cool counterweight; appellant, supported
+       clay     26deg  respondent; warm family, separated from saffron by
+                       value and chroma rather than by hue
+       rose    353deg  alerts only; never used for a party
+
+     Everything else is the warm neutral base. */
+  --saffron: #E0A33C;
+  --saffron-dim: #8A6526;
+
+  --teal: #6FA8B0;
+  --teal-dim: #3E6A70;
+
+  --clay: #BC8358;
+  --clay-dim: #7A5334;
+
+  --rose: #C96A72;
+  --rose-dim: #7E3B41;
+
+  /* Semantic aliases. Party and evidence colours resolve to the families
+     above so a new hue can never quietly creep back in. */
+  --appellant: var(--teal);
+  --respondent: var(--clay);
+  --supported: var(--teal);
+  --partial: var(--saffron);
+  --unsupported: var(--rose);
+  --warning: var(--saffron);
+
+  --background: var(--ink);
+  --foreground: var(--parchment);
+
+  /* shadcn/ui semantic tokens, mapped onto the palette above so its components
+     inherit this identity instead of arriving as stock shadcn neutrals. */
+  --radius: 0.5rem;
+  --card: var(--file);
+  --card-foreground: var(--parchment);
+  --popover: var(--file-raised);
+  --popover-foreground: var(--parchment);
+  --primary: var(--saffron);
+  --primary-foreground: var(--ink);
+  --secondary: var(--file-raised);
+  --secondary-foreground: var(--parchment);
+  --muted: var(--file-raised);
+  --muted-foreground: var(--parchment-dim);
+  --accent: var(--file-raised);
+  --accent-foreground: var(--parchment);
+  --destructive: var(--unsupported);
+  --destructive-foreground: var(--parchment);
+  --border: var(--rule);
+  --input: var(--rule-bright);
+  --ring: var(--saffron);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-ink: var(--ink);
+  --color-file: var(--file);
+  --color-file-raised: var(--file-raised);
+  --color-rule: var(--rule);
+  --color-rule-bright: var(--rule-bright);
+  --color-parchment: var(--parchment);
+  --color-parchment-dim: var(--parchment-dim);
+  --color-parchment-faint: var(--parchment-faint);
+  --color-saffron: var(--saffron);
+  --color-teal: var(--teal);
+  --color-teal-dim: var(--teal-dim);
+  --color-clay: var(--clay);
+  --color-clay-dim: var(--clay-dim);
+  --color-rose: var(--rose);
+  --color-rose-dim: var(--rose-dim);
+  --color-partial: var(--partial);
+  --color-warning: var(--warning);
+  --color-saffron-dim: var(--saffron-dim);
+  --color-appellant: var(--appellant);
+  --color-respondent: var(--respondent);
+  --color-supported: var(--supported);
+  --color-unsupported: var(--unsupported);
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display), ui-serif, Georgia, serif;
+  --font-display: var(--font-display), ui-serif, Georgia, serif;
+  --font-mono: var(--font-data), ui-monospace, monospace;
+  --font-data: var(--font-data), ui-monospace, monospace;
+}
+
+body {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* These live in the components layer so Tailwind utilities always win over
+   them. Declared as bare classes they tie on specificity with utilities and,
+   being later in source order, silently beat them — which is how `.eyebrow`
+   killed every `text-appellant` on the page. */
+@layer components {
+  /* Eyebrow: small, spaced, uppercase. Labels a section without competing
+     with the serif heads. */
+  .eyebrow {
+    font-family: var(--font-data), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--parchment-faint);
+  }
+
+  /* Statutory citation. Set as code because that is what it is. */
+  .cite {
+    font-family: var(--font-data), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: -0.01em;
+    color: var(--saffron);
+    border: 1px solid color-mix(in srgb, var(--saffron) 28%, transparent);
+    background: color-mix(in srgb, var(--saffron) 9%, transparent);
+    border-radius: 3px;
+    padding: 0.1rem 0.35rem;
+    white-space: nowrap;
+  }
+}
+
+/* --- The signature: the versus axis -------------------------------------
+   A vertical rule the arguments hang off. It draws downward on load, then
+   arguments arrive alternately across it so the exchange is watched rather
+   than merely read. */
+@keyframes axis-draw {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+.axis-line {
+  transform-origin: top center;
+  animation: axis-draw 900ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes argue-in-left {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes argue-in-right {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.argue-left  { animation: argue-in-left  620ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.argue-right { animation: argue-in-right 620ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rise-in { animation: rise-in 620ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .axis-line,
+  .argue-left,
+  .argue-right,
+  .rise-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Focus visible against a dark ground without being loud. */
+:focus-visible {
+  outline: 2px solid var(--saffron);
+  outline-offset: 2px;
+}
+
+@keyframes scroll-float {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
+.animate-scroll-float {
+  animation: scroll-float 2.5s ease-in-out infinite;
+}
+
+@keyframes wheel-roll {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-wheel-roll {
+  animation: wheel-roll 2.2s cubic-bezier(0.15, 0.41, 0.69, 0.94) infinite;
+}
+
+/* Redesign keyframe animations for floating labels */
+@keyframes float-label-1 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-3px, -7px);
+  }
+}
+@keyframes float-label-2 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(4px, -5px);
+  }
+}
+@keyframes float-label-3 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-5px, 3px);
+  }
+}
+@keyframes float-label-4 {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(3px, 5px);
+  }
+}
+
+.animate-float-1 {
+  animation: float-label-1 6s ease-in-out infinite;
+}
+.animate-float-2 {
+  animation: float-label-2 7s ease-in-out infinite;
+}
+.animate-float-3 {
+  animation: float-label-3 6.5s ease-in-out infinite;
+}
+.animate-float-4 {
+  animation: float-label-4 7.5s ease-in-out infinite;
+}
+
+/* Glow effects for cards & spotlight */
+.glow-red {
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.12) !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.cta-spotlight {
+  background: radial-gradient(circle 500px at 50% 50%, rgba(37, 99, 235, 0.08), transparent 70%);
+}
+
+.scroll-mt-section {
+  scroll-margin-top: 6rem;
+}
+
+
+
+
+/* Accordion needs these; tw-animate-css supplies animate-in/out but not these. */
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+@theme inline {
+  --animate-accordion-down: accordion-down 220ms ease-out;
+  --animate-accordion-up: accordion-up 220ms ease-out;
+}

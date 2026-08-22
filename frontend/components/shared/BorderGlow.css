@@ -1,0 +1,72 @@
+.border-glow-container {
+  position: relative;
+  box-sizing: border-box;
+  padding: 1px; /* border thickness */
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--border-radius, 32px);
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+/* Interactive mouse tracking glow layer */
+.border-glow-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    var(--glow-radius, 45px) circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    var(--glow-color-primary) 0%,
+    var(--glow-color-secondary) 50%,
+    transparent 100%
+  );
+  opacity: var(--glow-opacity, 0);
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+}
+
+/* Mask container to overlay content and clip border lines */
+.border-glow-inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--border-radius, 32px) - 1.2px);
+  background: var(--inner-bg, rgba(30, 26, 23, 0.95));
+  overflow: hidden;
+}
+
+/* Smooth rotating conic background for animated variants */
+.border-glow-container.animated::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  z-index: 1;
+  pointer-events: none;
+  background: conic-gradient(var(--glow-conic-colors));
+  animation: border-rotate-fallback 12s linear infinite;
+  opacity: var(--fill-opacity, 0.18);
+  transform-origin: center center;
+  border-radius: 50%;
+}
+
+@keyframes border-rotate-fallback {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.border-glow-container.h-full {
+  height: 100%;
+}
+
